@@ -1,73 +1,74 @@
 <template>
-    <div class="login-container">
-      <h2>Iniciar Sesión</h2>
+  <div class="flex items-center justify-center h-screen bg-gray-100 overflow-hidden">
+    <div class="bg-white p-8 rounded-2xl shadow-lg w-96">
+      <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">Iniciar Sesión</h2>
+      
       <form @submit.prevent="login">
-        <input type="email" v-model="email" placeholder="Correo" required />
-        <input type="password" v-model="password" placeholder="Contraseña" required />
-        <button type="submit" :disabled="loading">
-          {{ loading ? 'Cargando...' : 'Entrar' }}
+        <div class="mb-4">
+          <label for="email" class="block text-gray-700 font-semibold">Correo electrónico</label>
+          <input 
+            type="email" 
+            id="email" 
+            v-model="email"
+            class="w-full mt-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required 
+          />
+        </div>
+
+        <div class="mb-6">
+          <label for="password" class="block text-gray-700 font-semibold">Contraseña</label>
+          <input 
+            type="password" 
+            id="password" 
+            v-model="password"
+            class="w-full mt-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required 
+          />
+        </div>
+
+        <button 
+          type="submit"
+          class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300"
+        >
+          Iniciar sesión
         </button>
-        <p v-if="error" class="error">{{ error }}</p>
       </form>
+
+      <p v-if="error" class="mt-4 text-red-500 text-sm text-center">{{ error }}</p>
     </div>
-  </template>
-  
-  <script>
-  import axios from 'axios';
-  
-  export default {
-    data() {
-      return {
-        email: '',
-        password: '',
-        loading: false,
-        error: null,
-      };
-    },
-    methods: {
-      async login() {
-        this.loading = true;
-        this.error = null;
-        try {
-          const response = await axios.post('http://localhost:8080/api/login', {
-            email: this.email,
-            password: this.password,
-          });
-          localStorage.setItem('token', response.data.token);
-          localStorage.setItem('userName', response.data.name);
-          this.$router.push('/dashboard');
-        } catch (err) {
-          this.error = 'Credenciales incorrectas';
-        } finally {
-          this.loading = false;
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      email: '',
+      password: '',
+      error: ''
+    };
+  },
+  methods: {
+    async login() {
+      try {
+        const response = await fetch("http://localhost:8080/api/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: this.email, password: this.password }),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.message || "Credenciales incorrectas");
         }
-      },
-    },
-  };
-  </script>
-  
-  <style scoped>
-  .login-container {
-    text-align: center;
-    margin-top: 50px;
+
+        localStorage.setItem("token", data.token);
+        this.$router.push("/dashboard");
+      } catch (err) {
+        this.error = err.message;
+      }
+    }
   }
-  input {
-    display: block;
-    margin: 10px auto;
-    padding: 8px;
-    width: 250px;
-  }
-  button {
-    padding: 10px 15px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  .error {
-    color: red;
-    margin-top: 10px;
-  }
-  </style>
-  
+};
+</script>
