@@ -23,7 +23,7 @@
 
     <!-- Contenido principal con márgenes y sombreado -->
     <main class="flex-1 p-10 bg-gray-100 mx-6 my-6 rounded-lg shadow-lg max-w-7xl mx-auto">
-      <h2 class="text-2xl font-bold text-gray-800 text-center">Bienvenido, {{ userName }}</h2>
+      <router-view></router-view> <!-- Aquí se carga el contenido según la ruta -->
     </main>
   </div>
 </template>
