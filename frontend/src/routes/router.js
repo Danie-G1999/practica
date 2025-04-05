@@ -4,17 +4,19 @@ import Login from '../views/Login.vue';
 import Titles from '../views/Titles.vue';
 import Testimonies from '../views/Testimonies.vue';
 import Settings from '../views/Settings.vue';
+import Services from '../views/Services.vue';
 
 const routes = [
   { path: '/', component: Login },
-  { 
-    path: '/', 
-    component: Layout, 
+  {
+    path: '/',
+    component: Layout,
     meta: { requiresAuth: true },
     children: [
       { path: 'dashboard', component: Titles },
       { path: 'testimonies', component: Testimonies },
       { path: 'settings', component: Settings },
+      { path: 'services', component: Services }
     ]
   }
 ];

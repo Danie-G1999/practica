@@ -39,6 +39,103 @@ app.post('/api/login', async (req, res) => {
   }
 });
 
+// Ruta para consultar los servicios
+app.get('/api/services', async (req, res) => {
+  try {
+    // Consultar todos los servicios en la tabla "services"
+    const services = await knex('services').select('*').orderBy('id', 'asc');;
+
+    if (services.length === 0) {
+      return res.status(200).json({ error: 'No se encontraron servicios' });
+    }
+
+    res.json({ services });
+  } catch (error) {
+    console.error('Error en /api/services:', error);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+});
+
+// Ruta para crear un nuevo servicio
+app.post('/api/createService', async (req, res) => {
+  const { name, descripcion, price, status } = req.body;
+  // Validar que todos los campos estén presentes
+  if (!name || !descripcion || price === undefined || status === undefined) {
+    return res.status(400).json({ error: 'Faltan datos requeridos' });
+  }
+
+  try {
+    // Insertar el nuevo servicio en la base de datos
+    const [newService] = await knex('services').insert({
+      name,
+      descripcion,
+      price,  // Almacenamos el precio como decimal
+      status// Almacenamos el estado como 1 o 0
+    }).returning('*'); // Retornamos el servicio insertado para confirmación
+
+    res.status(201).json({ service: newService }); // Devolver el servicio creado
+  } catch (error) {
+    res.status(404).json({ error: error });
+  }
+});
+
+
+// Edicion de servicio
+app.put('/api/EditServices/:id', async (req, res) => {
+
+  const { id } = req.params;
+  const { name, descripcion, price, status } = req.body;
+
+  try {
+    // Realizar la actualización con Knex
+    const [updatedService] = await knex('services')
+      .where({ id })
+      .update({
+        name,
+        descripcion,
+        price,
+        status
+      })
+      .returning('*');
+
+    res.status(200).json({ service: updatedService }); // Respondemos con el servicio actualizado
+  } catch (error) {
+    res.status(500).json({ error: error });
+  }
+});
+
+// Método para alternar el estado de un servicio
+app.put('/api/services/:id/deactivate', async (req, res) => {
+  const { id } = req.params; // Obtenemos el id de la URL
+
+  try {
+    // Primero, obtenemos el servicio actual para saber su estado
+    const service = await knex('services').where({ id }).first();
+
+    // Si el servicio no se encuentra, respondemos con un error 404
+    if (!service) {
+      return res.status(404).json({ error: 'Servicio no encontrado' });
+    }
+
+    // Alternamos el estado: si el servicio está activo (status: true), lo desactivamos (status: false)
+    // Si está desactivado (status: false), lo activamos (status: true)
+    const newStatus = service.status ? false : true;
+
+    // Actualizamos el servicio con el nuevo estado
+    const updatedService = await knex('services')
+      .where({ id })
+      .update({ status: newStatus })
+      .returning('*'); // Devolvemos el servicio actualizado
+
+    // Respondemos con el servicio actualizado
+    res.status(200).json({ service: updatedService[0] });
+  } catch (error) {
+    console.error('Error al alternar el estado del servicio:', error);
+    res.status(500).json({ error: 'Hubo un error al alternar el estado del servicio' });
+  }
+});
+
+
 // Iniciar el servidor
 const port = 8080;
 app.listen(port, () => {
