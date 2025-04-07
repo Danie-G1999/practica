@@ -24,7 +24,7 @@
     </aside>
 
     <!-- Contenido dinámico -->
-    <main class="flex-1 ml-72 my-6 rounded-lg">
+    <main class="flex-1 ml-72 mr-5 my-6 rounded-lg">
       <router-view />
     </main>
   </div>

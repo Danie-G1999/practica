@@ -82,9 +82,9 @@
             </div>
 
             <!-- Sección de tabla donde se listarán los servicios -->
-            <div v-if="!showForm" class="overflow-x-auto rounded-lg shadow-lg border border-gray-200">
+            <div v-if="!showForm" class="overflow-x-auto overflow-y-auto max-h-[700px] rounded-lg shadow-lg border border-gray-200">
                 <table class="min-w-full bg-white divide-y divide-gray-200">
-                    <thead class="bg-gradient-to-r from-blue-800 to-blue-600">
+                    <thead class="bg-gradient-to-r from-blue-800 to-blue-600 sticky top-0 z-10">
                         <tr>
                             <th class="py-4 px-6 text-left text-xs font-medium text-white uppercase tracking-wider">#
                             </th>
@@ -113,7 +113,9 @@
                             <td class="py-4 px-6 text-sm font-medium text-gray-900">{{ service.name }}</td>
                             <td class="py-4 px-6 text-sm font-medium text-center text-gray-900">{{ service.descripcion
                             }}</td>
-                            <td class="py-4 px-6 text-sm font-medium text-center text-gray-900">{{ service.price }}</td>
+                            <td class="py-4 px-6 text-sm font-medium text-center text-gray-900">
+                                {{ Number(service.price).toLocaleString('es-ES', { style: 'currency', currency: 'EUR' }) }}
+                            </td>
                             <td class="py-4 px-6 text-sm font-medium text-center text-gray-900">{{ service.status ?
                                 'Activo'
                                 : 'Inactivo' }}</td>
@@ -224,11 +226,15 @@ export default {
         },
         // Método para agregar un nuevo servicio
         async addService() {
-            console.log('Nuevo servicio registrado:', this.newService); // Mostrar en consola lo que se registra
             try {
                 const response = await axios.post('http://localhost:8080/api/createService', this.newService);
                 this.services.push(response.data.service);  // Añadir el nuevo servicio a la lista
                 console.log(response.data)
+                if (response.data.status === 200) {
+                    this.$notifier.success('Servicio agregado correctamente');
+                } else {
+                    this.$notifier.alert('Error al agregar el servicio');
+                }
                 this.toggleForm();  // Cerrar el formulario
             } catch (error) {
                 console.error('Error al añadir el servicio:', error);
@@ -253,6 +259,11 @@ export default {
                 if (index !== -1) {
                     this.services[index] = response.data.service;
                 }
+                if (response.data.status === 200) {
+                    this.$notifier.success('Servicio actualizado correctamente');
+                } else {
+                    this.$notifier.alert('Error al actualizar el servicio');
+                }
 
                 // Resetear el formulario después de la actualización
                 this.resetForm();
@@ -270,7 +281,12 @@ export default {
         async deactivateService(serviceId) {
             try {
                 const response = await axios.put(`http://localhost:8080/api/services/${serviceId}/deactivate`);
-                this.loadServices();
+                if (response.status === 200) {
+                    this.loadServices();
+                    this.$notifier.success('Servicio desactivado correctamente');
+                } else {
+                    this.$notifier.alert('Error al desactivar el servicio');
+                }
             } catch (error) {
                 console.error('Error al desactivar el servicio:', error);
             }

@@ -73,9 +73,9 @@ app.post('/api/createService', async (req, res) => {
       status// Almacenamos el estado como 1 o 0
     }).returning('*'); // Retornamos el servicio insertado para confirmación
 
-    res.status(201).json({ service: newService }); // Devolver el servicio creado
+    res.status(200).json({ service: newService, status: 200 }); // Devolver el servicio creado
   } catch (error) {
-    res.status(404).json({ error: error });
+    res.status(500).json({ error: error, status: 500 });
   }
 });
 
@@ -98,9 +98,9 @@ app.put('/api/EditServices/:id', async (req, res) => {
       })
       .returning('*');
 
-    res.status(200).json({ service: updatedService }); // Respondemos con el servicio actualizado
+    res.status(200).json({ service: updatedService, status: 200 }); // Respondemos con el servicio actualizado
   } catch (error) {
-    res.status(500).json({ error: error });
+    res.status(500).json({ error: error, status: 500 });
   }
 });
 
@@ -114,7 +114,7 @@ app.put('/api/services/:id/deactivate', async (req, res) => {
 
     // Si el servicio no se encuentra, respondemos con un error 404
     if (!service) {
-      return res.status(404).json({ error: 'Servicio no encontrado' });
+      return res.status(404).json({ error: 'Servicio no encontrado', status: 404 });
     }
 
     // Alternamos el estado: si el servicio está activo (status: true), lo desactivamos (status: false)
@@ -128,10 +128,10 @@ app.put('/api/services/:id/deactivate', async (req, res) => {
       .returning('*'); // Devolvemos el servicio actualizado
 
     // Respondemos con el servicio actualizado
-    res.status(200).json({ service: updatedService[0] });
+    res.status(200).json({ service: updatedService[0], status: 200 });
   } catch (error) {
     console.error('Error al alternar el estado del servicio:', error);
-    res.status(500).json({ error: 'Hubo un error al alternar el estado del servicio' });
+    res.status(500).json({ error: 'Hubo un error al alternar el estado del servicio', status: 500 });
   }
 });
 
