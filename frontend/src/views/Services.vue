@@ -1,18 +1,18 @@
 <template>
     <div>
-        <!-- Contenido de configuración aquí -->
         <div class="p-6 rounded-lg shadow-lg bg-gray-50">
+            <!-- Titulo de seccion -->
             <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-bold">Servicios</h2>
+                <h2 class="text-2xl font-bold">{{ showForm ? 'Editar Servicio' : 'Servicios' }}</h2>
                 <button @click="toggleForm"
-                    class="px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-all duration-300 font-medium shadow-md flex items-center">
+                    class="cursor-pointer px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-all duration-300 font-medium shadow-md flex items-center">
                     <span v-if="!showForm" class="flex items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                         </svg>
-                        Añadir Servicio
+                        Añadir
                     </span>
                     <span v-else>Cancelar</span>
                 </button>
@@ -135,9 +135,10 @@
                                     </button>
 
                                     <!-- Tooltip -->
-                                    <div
-                                        class="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 bg-gray-700 text-white text-xs font-bold py-1 px-2 rounded shadow-lg transition-opacity duration-300 pointer-events-none">
+                                    <div class="absolute top-full mt-2 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 bg-gray-700 text-white text-xs font-bold py-1 px-2 rounded shadow-lg transition-opacity duration-300 pointer-events-none z-50">
                                         Editar servicio
+                                        <!-- Flechita -->
+                                        <div class="absolute -top-1 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-gray-700 rotate-45 z-[-1]"></div>
                                     </div>
                                 </div>
 
@@ -170,8 +171,12 @@
 
                                     <!-- Tooltip -->
                                     <div
-                                        class="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 bg-gray-700 text-white text-xs font-bold py-1 px-2 rounded shadow-lg transition-opacity duration-300 pointer-events-none">
+                                        class="absolute top-full mt-2 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 bg-gray-700 text-white text-xs font-bold py-1 px-2 rounded shadow-lg transition-opacity duration-300 pointer-events-none z-50"
+                                    >
                                         {{ service.status === true ? 'Desactivar servicio' : 'Activar servicio' }}
+                                        
+                                        <!-- Flechita -->
+                                        <div class="absolute -top-1 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-gray-700 rotate-45 z-[-1]"></div>
                                     </div>
                                 </div>
                             </td>
