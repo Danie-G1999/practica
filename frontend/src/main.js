@@ -3,6 +3,8 @@ import App from './App.vue';
 import router from './routes/router.js';
 import './assets/main.css';
 import notifier from './assets/utils/notifier.js';
+import '@fortawesome/fontawesome-free/css/all.css'
+
 
 const app = createApp(App)
 

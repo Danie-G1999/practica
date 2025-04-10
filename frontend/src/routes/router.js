@@ -5,9 +5,11 @@ import Titles from '../views/Titles.vue';
 import Testimonies from '../views/Testimonies.vue';
 import Settings from '../views/Settings.vue';
 import Services from '../views/Services.vue';
+import Home from '../views/Home.vue';
 
 const routes = [
   { path: '/', component: Login },
+  { path: '/home', component: Home },
   {
     path: '/',
     component: Layout,
