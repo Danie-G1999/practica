@@ -111,8 +111,11 @@
                         <tr v-for="service in services" :key="service.id">
                             <td class="py-4 px-6 text-sm font-medium text-gray-900">{{ service.id }}</td>
                             <td class="py-4 px-6 text-sm font-medium text-gray-900">{{ service.name }}</td>
-                            <td class="py-4 px-6 text-sm font-medium text-center text-gray-900">{{ service.descripcion
-                            }}</td>
+                            <td 
+  class="py-4 px-6 text-sm font-medium text-center text-gray-900 max-w-[250px] max-h-[100px] overflow-hidden text-ellipsis break-words"
+>
+  {{ service.descripcion }}
+</td>
                             <td class="py-4 px-6 text-sm font-medium text-center text-gray-900">
                                 {{ Number(service.price).toLocaleString('es-ES', { style: 'currency', currency: 'EUR' }) }}
                             </td>
@@ -233,8 +236,7 @@ export default {
         async addService() {
             try {
                 const response = await axios.post('http://localhost:8080/api/createService', this.newService);
-                this.services.push(response.data.service);  // Añadir el nuevo servicio a la lista
-                console.log(response.data)
+                this.services.push(response.data.service); 
                 if (response.data.status === 200) {
                     this.$notifier.success('Servicio agregado correctamente');
                 } else {

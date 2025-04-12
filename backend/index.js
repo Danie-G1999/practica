@@ -135,6 +135,137 @@ app.put('/api/services/:id/deactivate', async (req, res) => {
   }
 });
 
+// Cargaremos los testimonios
+app.get('/api/testimonials', async (req, res) => {
+  try {
+    const testimonies = await knex('testimonies').select('*');
+    res.status(200).json({ status: 200, testimonies });
+  } catch (error) {
+    console.error('Error al obtener testimonios:', error);
+    res.status(500).json({ status: 500, error: 'Error interno del servidor' });
+  }
+});
+
+// Cargaremos los testimonios activos
+app.get('/api/testimonialsActive', async (req, res) => {
+  try {
+    const testimonies = await knex('testimonies').select('*').where({ status: true });;
+    res.status(200).json({ status: 200, testimonies });
+  } catch (error) {
+    console.error('Error al obtener testimonios:', error);
+    res.status(500).json({ status: 500, error: 'Error interno del servidor' });
+  }
+});
+
+// endpoint para guardar testimonios
+app.post('/api/testimonials', async (req, res) => {
+  const { name, descripcion, date, calification, image } = req.body;
+
+  // Validación
+  if (!name || !descripcion || !date || !calification || !image) {
+    return res.status(400).json({ error: 'Faltan datos requeridos' });
+  }
+
+  try {
+    const [newTestimonial] = await knex('testimonies')
+      .insert({
+        name,
+        descripcion,
+        image,
+        date,
+        calification // <- corregí el nombre según tu base
+      })
+      .returning('*');
+
+    res.status(200).json({ testimonial: newTestimonial, status: 200 });
+  } catch (error) {
+    console.error('Error al guardar el testimonio:', error);
+    res.status(500).json({ error: 'Error interno del servidor', status: 500 });
+  }
+});
+
+
+// Editaremos el testimonio
+app.put('/api/testimonials/:id', async (req, res) => {
+  const { id } = req.params;
+  const { name, descripcion, image, date, calification } = req.body;
+
+  // Validar campos necesarios
+  if (!name || !descripcion || !date || !calification) {
+    return res.status(400).json({ error: 'Faltan datos requeridos' });
+  }
+
+  try {
+    const [updatedTestimonial] = await knex('testimonies')
+      .where({ id })
+      .update({
+        name,
+        descripcion,
+        image,         // Asegúrate de que esté en base64 o como lo manejes
+        date,
+        calification
+      })
+      .returning('*');
+
+    res.status(200).json({ testimonial: updatedTestimonial, status: 200 });
+  } catch (error) {
+    res.status(500).json({ error: error.message, status: 500 });
+  }
+});
+
+
+// Método para alternar el estado de un testimonio
+app.put('/api/testimonials/:id/deactivate', async (req, res) => {
+  const { id } = req.params; // Obtenemos el id de la URL
+
+  try {
+    // Primero, obtenemos el testimonio actual para saber su estado
+    const testimonial = await knex('testimonies').where({ id }).first();
+
+    // Si el testimonio no se encuentra, respondemos con un error 404
+    if (!testimonial) {
+      return res.status(404).json({ error: 'Testimonio no encontrado', status: 404 });
+    }
+
+    // Alternamos el estado: si el testimonio está activo (status: true), lo desactivamos (status: false)
+    // Si está desactivado (status: false), lo activamos (status: true)
+    const newStatus = testimonial.status ? false : true;
+
+    // Actualizamos el testimonio con el nuevo estado
+    const updatedTestimonial = await knex('testimonies')
+      .where({ id })
+      .update({ status: newStatus })
+      .returning('*'); // Devolvemos el testimonio actualizado
+
+    // Respondemos con el testimonio actualizado
+    res.status(200).json({ testimonial: updatedTestimonial[0], status: 200 });
+  } catch (error) {
+    console.error('Error al alternar el estado del testimonio:', error);
+    res.status(500).json({ error: 'Hubo un error al alternar el estado del testimonio', status: 500 });
+  }
+});
+
+
+// Ruta para guardar contacto
+app.post('/api/contact', async (req, res) => {
+  const { name, email, phone, message } = req.body;
+
+  // Validación de campos
+  if (!name || !email || !phone || !message) {
+    return res.status(400).json({ status: 400, error: 'Todos los campos son obligatorios' });
+  }
+
+  try {
+    await knex('contacts').insert({ name, email, phone, message });
+
+    // Solo enviamos mensaje de éxito
+    res.status(200).json({ status: 200, message: 'Contacto guardado exitosamente' });
+  } catch (error) {
+    console.error('Error al guardar el contacto:', error);
+    res.status(500).json({ status: 500, error: 'Error al guardar el contacto' });
+  }
+});
+
 
 // Iniciar el servidor
 const port = 8080;

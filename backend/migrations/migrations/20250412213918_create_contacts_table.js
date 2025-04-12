@@ -3,13 +3,12 @@
  * @returns { Promise<void> }
  */
 exports.up = function (knex) {
-    return knex.schema.createTable('testimonies', (table) => {
+    return knex.schema.createTable('contacts', (table) => {
         table.increments('id').primary(); // ID autoincremental
         table.string('name').notNullable();
-        table.string('descripcion').notNullable();
-        table.text('image').notNullable();
-        table.date('date').notNullable();
-        table.integer('calification').notNullable();
+        table.string('email').notNullable();
+        table.string('phone', 15).notNullable();
+        table.string('message').notNullable();
         table.boolean('status').defaultTo(true);
         table.timestamps(true, true); // created_at y updated_at
     });
@@ -20,5 +19,5 @@ exports.up = function (knex) {
  * @returns { Promise<void> }
  */
 exports.down = function (knex) {
-    return knex.schema.dropTable('testimonies');
+    return knex.schema.dropTable('contacts');
 };

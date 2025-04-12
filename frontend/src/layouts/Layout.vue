@@ -7,7 +7,7 @@
       <nav>
         <ul class="space-y-4">
           <li>
-            <router-link to="/dashboard" class="block p-3 rounded-lg hover:bg-gray-700">Títulos</router-link>
+            <router-link to="/dashboard" class="block p-3 rounded-lg hover:bg-gray-700">Contacto</router-link>
           </li>
           <li>
             <router-link to="/testimonies" class="block p-3 rounded-lg hover:bg-gray-700">Testimonios</router-link>
