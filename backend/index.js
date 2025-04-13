@@ -149,7 +149,7 @@ app.get('/api/testimonials', async (req, res) => {
 // Cargaremos los testimonios activos
 app.get('/api/testimonialsActive', async (req, res) => {
   try {
-    const testimonies = await knex('testimonies').select('*').where({ status: true });;
+    const testimonies = await knex('testimonies').select('*').where({ status: true });
     res.status(200).json({ status: 200, testimonies });
   } catch (error) {
     console.error('Error al obtener testimonios:', error);
@@ -263,6 +263,47 @@ app.post('/api/contact', async (req, res) => {
   } catch (error) {
     console.error('Error al guardar el contacto:', error);
     res.status(500).json({ status: 500, error: 'Error al guardar el contacto' });
+  }
+});
+
+
+// Ruta para cargar los contactos
+app.get('/api/contacts', async (req, res) => {
+  try {
+    const contacts = await knex('contacts').select('*').orderBy('status', 'desc');;
+    res.status(200).json({ status: 200, contacts });
+  } catch (error) {
+    console.error('Error al obtener contactos:', error);
+    res.status(500).json({ status: 500, error: 'Error interno del servidor' });
+  }
+});
+
+
+// Endpoint para alternar el estado de un contacto
+app.put('/api/contacts/:id/deactivate', async (req, res) => {
+  const { id } = req.params; // Obtenemos el id del contacto desde la URL
+
+  try {
+    // Buscar el contacto actual
+    const contact = await knex('contacts').where({ id }).first();
+
+    if (!contact) {
+      return res.status(404).json({ error: 'Contacto no encontrado', status: 404 });
+    }
+
+    // Alternar estado
+    const newStatus = contact.status ? false : true;
+
+    // Actualizar estado
+    const updatedContact = await knex('contacts')
+      .where({ id })
+      .update({ status: newStatus })
+      .returning('*'); // Devuelve el contacto actualizado
+
+    res.status(200).json({ contact: updatedContact[0], status: 200 });
+  } catch (error) {
+    console.error('Error al alternar el estado del contacto:', error);
+    res.status(500).json({ error: 'Hubo un error al alternar el estado del contacto', status: 500 });
   }
 });
 
