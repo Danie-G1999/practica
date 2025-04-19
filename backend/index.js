@@ -11,7 +11,7 @@ app.use(express.json());
 app.use(cors());
 
 // Servir archivos estáticos de la carpeta frontend/dist
-app.use(express.static(path.join(__dirname, 'frontend', 'dist')));
+app.use(express.static(path.join(__dirname, 'frontend/dist')));
 
 // Ruta para index.html
 app.get('*', (req, res) => {
