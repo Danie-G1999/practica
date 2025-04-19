@@ -10,12 +10,12 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-// Servir archivos estáticos de la carpeta frontend/dist
-app.use(express.static(path.join(__dirname, 'frontend/dist')));
+// Vue build
+app.use(express.static(path.join(__dirname, '../frontend/dist')));
 
-// Ruta para index.html
+// Fallback para SPA
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'frontend', 'dist', 'index.html'));
+  res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
 });
 
 // Definir un usuario de prueba
