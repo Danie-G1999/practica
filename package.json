@@ -1,11 +1,10 @@
 {
-    "name": "axan-app",
+    "name": "fullstack-app",
     "version": "1.0.0",
     "scripts": {
         "heroku-postbuild": "cd frontend && npm install && npm run build"
     },
     "engines": {
-        "node": "18.x",
-        "npm": "9.x"
+        "node": "18.x"
     }
 }

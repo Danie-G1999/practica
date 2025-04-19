@@ -4,17 +4,18 @@ const bcrypt = require('bcryptjs');
 const cors = require('cors');
 const knex = require('knex')(require('./knexfile').development);
 const path = require('path');
+const port = process.env.PORT || 8080;
 
 const app = express();
 app.use(express.json());
 app.use(cors());
 
 // Servir archivos estáticos desde frontend/dist
-app.use(express.static(path.join(__dirname, './frontend/dist')));
+app.use(express.static(path.join(__dirname, '../frontend/dist')));
 
 // Redirigir todas las rutas al index.html
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, './frontend/dist/index.html'));
+  res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
 });
 
 // Definir un usuario de prueba
@@ -318,7 +319,6 @@ app.put('/api/contacts/:id/deactivate', async (req, res) => {
 
 
 // Iniciar el servidor
-const port = process.env.PORT || 8080;
 app.listen(port, () => {
   console.log(`Servidor corriendo en http://localhost:${port}`);
 });
