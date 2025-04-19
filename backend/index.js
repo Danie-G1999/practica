@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const cors = require('cors');
 const knex = require('knex')(require('./knexfile').development);
+const path = require('path');
 
 const app = express();
 app.use(express.json());
