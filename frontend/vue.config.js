@@ -1,5 +1,8 @@
 // frontend/vue.config.js
 module.exports = {
+    outputDir: 'dist',
     publicPath: './',
-    outputDir: 'dist'
+    devServer: {
+        historyApiFallback: true
+    }
 };
