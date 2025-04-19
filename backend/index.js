@@ -318,7 +318,7 @@ app.put('/api/contacts/:id/deactivate', async (req, res) => {
 
 
 // Iniciar el servidor
-const port = 8080;
+const port = process.env.PORT || 8080;
 app.listen(port, () => {
   console.log(`Servidor corriendo en http://localhost:${port}`);
 });
