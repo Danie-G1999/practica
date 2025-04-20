@@ -258,8 +258,9 @@ import axios from 'axios';
         };
       },
       async deactivateTestimonie(TestimonieID){
+        const apiUrl = import.meta.env.VITE_API_URL;
         try {
-          const response = await axios.put(`http://localhost:8080/api/testimonials/${TestimonieID}/deactivate`);
+          const response = await axios.put(`${apiUrl}/testimonials/${TestimonieID}/deactivate`);
           
           if (response.status === 200) {
             this.loadTestimonies(); // Recarga la lista de testimonios
@@ -273,10 +274,11 @@ import axios from 'axios';
         }
       },
       async testimonieEdit(){
+        const apiUrl = import.meta.env.VITE_API_URL;
         try {
           // Realizar la petición PUT para actualizar el testimonio
           const response = await axios.put(
-            `http://localhost:8080/api/testimonials/${this.newTestimonio.id}`,
+            `${apiUrl}/api/testimonials/${this.newTestimonio.id}`,
             this.newTestimonio
           );
 
@@ -306,8 +308,9 @@ import axios from 'axios';
             this.showForm = false;
         },
       async loadTestimonies() {
+        const apiUrl = import.meta.env.VITE_API_URL;
         try {
-          const response = await axios.get('http://localhost:8080/api/testimonials');
+          const response = await axios.get(`${apiUrl}/api/testimonials`);
 
           if (response.data.status === 200) {
             this.testimonies = response.data.testimonies;
@@ -320,8 +323,9 @@ import axios from 'axios';
         }
       },
       async addTestimonio() {
+        const apiUrl = import.meta.env.VITE_API_URL;
         try {
-          const response = await axios.post('http://localhost:8080/api/testimonials', this.newTestimonio);
+          const response = await axios.post(`${apiUrl}/api/testimonials`, this.newTestimonio);
 
           // Si tu backend responde con el testimonio guardado:
           if (response.status === 200 || response.status === 201) {
