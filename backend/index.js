@@ -13,15 +13,23 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-// Ruta absoluta a la carpeta dist
-const vueDistPath = path.join(__dirname, '..', 'frontend', 'dist');
+// // Ruta absoluta a la carpeta dist
+// const vueDistPath = path.join(__dirname, '..', 'frontend', 'dist');
 
-// Sirve archivos estáticos (JS, CSS, etc.)
-app.use(express.static(vueDistPath));
+// // Sirve archivos estáticos (JS, CSS, etc.)
+// app.use(express.static(vueDistPath));
 
-// Esta línea asegura que TODAS las rutas que no son archivos estáticos devuelvan index.html
+// // Esta línea asegura que TODAS las rutas que no son archivos estáticos devuelvan index.html
+// app.get('*', (req, res) => {
+//   res.sendFile(path.join(vueDistPath, 'index.html'));
+// });
+
+app.use('/api', require('./routes/api'));
+
+// Aquí abajo sirves el frontend
+app.use(express.static(path.join(__dirname, '../frontend/dist')));
 app.get('*', (req, res) => {
-  res.sendFile(path.join(vueDistPath, 'index.html'));
+  res.sendFile(path.resolve(__dirname, '../frontend/dist', 'index.html'));
 });
 
 // Definir un usuario de prueba
