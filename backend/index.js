@@ -13,8 +13,6 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-app.use('/api', require('./routes/api'));
-
 // Ruta absoluta a la carpeta dist
 const vueDistPath = path.join(__dirname, '..', 'frontend', 'dist');
 
