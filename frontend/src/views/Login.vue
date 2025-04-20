@@ -51,7 +51,7 @@ export default {
   methods: {
     async login() {
       const apiUrl = import.meta.env.VITE_API_URL;
-      console.log('API URL:', apiUrl);
+      console.log('API URL:', import.meta.env.VITE_API_URL);
       try {
         const response = await fetch(`${apiUrl}/api/login`, {
           method: "POST",
