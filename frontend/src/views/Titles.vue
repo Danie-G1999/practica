@@ -90,19 +90,21 @@ export default {
   },
   methods: {
     async getContacts() {
+      const apiUrl = import.meta.env.VITE_API_URL;
       try {
-        const response = await axios.get("http://localhost:8080/api/contacts");
+        const response = await axios.get(`${apiUrl}/api/contacts`);
         if (response.data.status === 200) {
           this.contacts = response.data.contacts;
         }
       } catch (error) {
         console.error(error);
-        alert('No se pudieron cargar los contactos'); // O usa algún sistema de notificación si tienes uno
+        this.$notifier.alert('No se pudieron cargar los contactos');
       }
     },
     async contactService(idContact){
+      const apiUrl = import.meta.env.VITE_API_URL;
       try {
-          const response = await axios.put(`http://localhost:8080/api/contacts/${idContact}/deactivate`);
+          const response = await axios.put(`${apiUrl}/api/contacts/${idContact}/deactivate`);
           if (response.status === 200) {
               this.getContacts();
               this.$notifier.success('Cambio de estado correctamente');
