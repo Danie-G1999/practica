@@ -287,8 +287,9 @@ export default {
   },
   methods: {
     async addContact() {
+        const apiUrl = import.meta.env.VITE_API_URL;
         try {
-            const response = await axios.post('http://localhost:8080/api/contact', this.contact);
+            const response = await axios.post(`${apiUrl}/api/contact`, this.contact);
 
             if (response.status === 200) {
             this.$notifier.success('Mensaje enviado correctamente');
@@ -319,16 +320,18 @@ export default {
       }
     },
     async fetchServicios() {
+    const apiUrl = import.meta.env.VITE_API_URL;
       try {
-        const response = await axios.get("http://localhost:8080/api/services");
+        const response = await axios.get(`${apiUrl}/api/services`);
         this.servicios = response.data.services;
       } catch (error) {
         console.error("Error al cargar los servicios:", error);
       }
     },
     async getTestimonies(){
+        const apiUrl = import.meta.env.VITE_API_URL;
         try {
-          const response = await axios.get('http://localhost:8080/api/testimonialsActive');
+          const response = await axios.get(`${apiUrl}/api/testimonialsActive`);
 
           if (response.data.status === 200) {
             this.testimonials = response.data.testimonies;
