@@ -220,8 +220,9 @@ export default {
         },
         // Método para cargar los servicios desde la API
         async loadServices() {
+            const apiUrl = import.meta.env.VITE_API_URL;
             try {
-                const response = await axios.get('http://localhost:8080/api/services');
+                const response = await axios.get(`${apiUrl}/api/services`);
                 if (response.data.services && response.data.services.length > 0) {
                     this.services = response.data.services;
                 } else {
@@ -234,8 +235,9 @@ export default {
         },
         // Método para agregar un nuevo servicio
         async addService() {
+            const apiUrl = import.meta.env.VITE_API_URL;
             try {
-                const response = await axios.post('http://localhost:8080/api/createService', this.newService);
+                const response = await axios.post(`${apiUrl}/api/createService`, this.newService);
                 this.services.push(response.data.service); 
                 if (response.data.status === 200) {
                     this.$notifier.success('Servicio agregado correctamente');
@@ -255,10 +257,11 @@ export default {
             // Aquí podrías agregar lógica para abrir un formulario de edición
         },
         async serviceEditing() {
+            const apiUrl = import.meta.env.VITE_API_URL;
             try {
 
                 // Realizar la petición PUT para actualizar el servicio
-                const response = await axios.put(`http://localhost:8080/api/EditServices/${this.newService.id}`, this.newService);
+                const response = await axios.put(`${apiUrl}/api/EditServices/${this.newService.id}`, this.newService);
 
                 console.log(response.data)
                 // Actualizamos la lista de una vez
@@ -286,8 +289,9 @@ export default {
         },
         // Método para desactivar un servicio
         async deactivateService(serviceId) {
+            const apiUrl = import.meta.env.VITE_API_URL;
             try {
-                const response = await axios.put(`http://localhost:8080/api/services/${serviceId}/deactivate`);
+                const response = await axios.put(`${apiUrl}/api/services/${serviceId}/deactivate`);
                 if (response.status === 200) {
                     this.loadServices();
                     this.$notifier.success('Servicio desactivado correctamente');
