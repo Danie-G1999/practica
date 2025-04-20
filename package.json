@@ -2,7 +2,7 @@
     "name": "fullstack-app",
     "version": "1.0.0",
     "scripts": {
-        "start": "cd backend && node index.js",
+        "start": "node backend/index.js",
         "heroku-postbuild": "cd frontend && npm install && npm run build"
     },
     "engines": {
