@@ -93,6 +93,7 @@ export default {
       const apiUrl = import.meta.env.VITE_API_URL;
       try {
         const response = await axios.get(`${apiUrl}/api/contacts`);
+        console.log(response.data)
         if (response.data.status === 200) {
           this.contacts = response.data.contacts;
         }
