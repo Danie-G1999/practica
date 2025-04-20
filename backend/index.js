@@ -2,7 +2,10 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const cors = require('cors');
-const knex = require('knex')(require('./knexfile').development);
+// const knex = require('knex')(require('./knexfile').development);
+const environment = process.env.NODE_ENV || 'development';
+const config = require('./knexfile')[environment];
+const knex = require('knex')(config);
 const path = require('path');
 const port = process.env.PORT || 8080;
 
