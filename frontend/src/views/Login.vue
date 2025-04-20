@@ -50,7 +50,7 @@ export default {
   },
   methods: {
     async login() {
-      const apiUrl = process.env.VUE_APP_API_URL;
+      const apiUrl = process.env.VITE_APP_API_URL;
       console.log('API URL:', apiUrl);
       try {
         const response = await fetch(`${apiUrl}/api/login`, {
